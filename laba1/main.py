@@ -12,6 +12,7 @@ digit = False
 lower = False
 upper = False
 spec_char = False
+space = False
 power = 0
 
 for i in range(len(password)):
@@ -27,6 +28,10 @@ for i in range(len(password)):
         if password[i].isupper():
             upper = True
             power += 26
+    if space !=True:
+        if password[i].isspace():
+            space = True
+            power +=1
     if spec_char != True:
         for j in range(len(special_characters)):
             if password[i] == special_characters[j]:
