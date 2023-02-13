@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.messagebox import showerror, showwarning, showinfo
 
+
 start_file = 'text.txt'
 new_file = start_file[:-4]+'.txt'
 alfavitEN = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
