@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.messagebox import showerror, showwarning, showinfo
 
-
 start_file = 'text.txt'
 new_file = start_file[:-4]+'.txt'
 alfavitEN = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
@@ -54,7 +53,6 @@ def decryptionCaesar(file, move_step,alfavit):
                 result += letter
     return result
 
-
 encryption_step = int(input('Введите шаг шифрования: '))
 decryption_step = int(input('Введите шаг дешифрования: '))
 
@@ -88,5 +86,3 @@ class windows():
     first_str_decC.pack()
     str_dec.pack()
     root.mainloop()
-
-

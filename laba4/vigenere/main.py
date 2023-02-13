@@ -5,7 +5,7 @@ from tkinter.messagebox import showerror, showwarning, showinfo
 
 start_file = 'text.txt'
 new_file = start_file[:-4]+'.txt'
-alfavitEN =  'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
+alfavitEN =  'abcdefghijklmnopqrstuvwxyz'
 def readFile(file):
     with open(file,'r') as text:
         mylist = text.read()
@@ -18,44 +18,48 @@ def writeFile(file, value):
         text.write(file)
     return file
 
-def encryptionVigenere(file, key,alfavit):
+def kvadratVigenera(alfavit):
+    array = list(alfavit.upper())
+    for i in range(len(alfavit)):
+        for i in array:
+            if i == array[0]:
+                print(end="|")
+            print(i, end="|")
+        array.append(array[0])
+        array.remove(array[0])
+        print()
+kvadratVigenera(alfavitEN)
+
+def encryptionVigener(file,key):
     result = ''
-    key_as_int = [ord(i) for i in key]
-    plaintext_int = [ord(i) for i in file]
-    for i in range(len(plaintext_int)):
-        value = (plaintext_int[i] + key_as_int[i % file]) % 26
-        result += chr(value + 65)
+    text = readFile(file)
+    key *= len(text) // len(key) + 1
+
+    for i, j in enumerate(text):
+        gg = (ord(j) + ord(key[i]))
+        result += chr(gg % 26 + 65)
     return result
 
-def decryptionVigenere(file, key,alfavit):
+def decryptionVigener(file,key):
     result = ''
-    text = readFile(file).lower()
-    for letter in text:
-        place = alfavit.find(letter)
-        new_place = place - move_step
-        if letter in alfavit:
-            result += alfavit[new_place]
-        else:
-            result += letter
+    file = readFile(file)
+    for i, j in enumerate(result):
+        gg = (ord(j) - ord(key[i]))
+        print(chr(gg % 26 + 65))
+        result += chr(gg % 26 + 65)
     return result
 
+encryption_key = input('Введите ключ шифрования: ')
+decryption_key = input('Введите ключ дешифрования: ')
 
-encryption_step = int(input('Введите шаг шифрования: '))
-decryption_step = int(input('Введите шаг дешифрования: '))
-
-if encryption_step or decryption_step > len(alfavitEN/2):
-    alfavitEN = alfavitEN + alfavitEN
-
-result_encryptionCaesar = (encryptionCaesar(start_file, encryption_step,alfavitEN))
-writeFile(result_encryptionCaesar,'encC_')
-result_decryptionCaesar = (decryptionCaesar('encC_'+new_file,decryption_step,alfavitEN))
-writeFile(result_decryptionCaesar,'decC_')
+result_encryptionVigenere = (encryptionVigener(start_file, encryption_key))
+writeFile(result_encryptionVigenere,'encV_')
+result_decryptionVigenere = (decryptionVigener('encV_'+new_file,decryption_key))
+writeFile(result_decryptionVigenere,'decV_')
 
 first_string_start_file=printFirstStringFile(start_file)
-first_string_enc_file=printFirstStringFile('encC_'+new_file)
-first_string_dec_file=printFirstStringFile('decC_'+new_file)
-
-
+first_string_enc_file=printFirstStringFile('encV_'+new_file)
+first_string_dec_file=printFirstStringFile('decV_'+new_file)
 class windows():
 
     root = Tk()
@@ -74,5 +78,3 @@ class windows():
     first_str_decC.pack()
     str_dec.pack()
     root.mainloop()
-
-
