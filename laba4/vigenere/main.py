@@ -51,7 +51,16 @@ def encryptionVigener(file,key):
 def decryptionVigener(file,key):
     result = ''
     text = readFile(file)
-    
+    for i in range(len(text)):
+        text_pos = GetPos(text[i])
+        if text_pos != -1:
+            j = 0
+            key_pos = GetPos(key[i%len(key)])
+            while(j(matrix[j][key_pos])!=text[i]):
+                result += alfavitEN[j]
+                j+=1
+        else:
+            result += text[i]
     return result
 
 encryption_key = input('Введите ключ шифрования: ')
