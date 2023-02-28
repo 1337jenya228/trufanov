@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter.messagebox import showerror, showwarning, showinfo
 import random as rnd
 
-start_file = 'laba4/vigenere/text.txt'
+start_file = 'text.txt'
 new_file = start_file[:-4]+'.txt'
 alfavitEN =  'abcdefghijklmnopqrstuvwxyz'
 def readFile(file):
@@ -54,13 +54,22 @@ def decryptionVigener(file,key):
     for i in range(len(text)):
         text_pos = GetPos(text[i])
         if text_pos != -1:
-            j = 0
             key_pos = GetPos(key[i%len(key)])
-            while(j(matrix[j][key_pos])!=text[i]):
-                result += alfavitEN[j]
-                j+=1
+            result += matrix[key_pos][text_pos]
         else:
             result += text[i]
+    # result = ''
+    # text = readFile(file)
+    # for i in range(len(text)):
+    #     text_pos = GetPos(text[i])
+    #     if text_pos != -1:
+    #         j = 1
+    #         key_pos = GetPos(key[i%len(key)])
+    #         while((matrix[j][key_pos])!=text[i]):
+    #             result += alfavitEN[j]
+    #             j+=1
+    #     else:
+    #         result += text[i]
     return result
 
 encryption_key = input('Введите ключ шифрования: ')
@@ -91,24 +100,24 @@ writeFile(result_encryptionVigenere,'encV_')
 result_decryptionVigenere = (decryptionVigener('encV_'+new_file,decryption_key))
 writeFile(result_decryptionVigenere,'decV_')
 
-first_string_start_file=printFirstStringFile(start_file)
-first_string_enc_file=printFirstStringFile('encV_'+new_file)
-first_string_dec_file=printFirstStringFile('decV_'+new_file)
-class windows():
+# first_string_start_file=printFirstStringFile(start_file)
+# first_string_enc_file=printFirstStringFile('encV_'+new_file)
+# first_string_dec_file=printFirstStringFile('decV_'+new_file)
+# class windows():
 
-    root = Tk()
-    root.title('Первые строки')
-    root.geometry('400x200')
-    first_str_start = Label(root, text='Первая строка исходного файла')
-    str_start = Label(root, text=first_string_start_file)
-    first_str_encC = Label(root, text='Первая строка зашифрованого файла')
-    str_enc = Label(root, text=first_string_enc_file)
-    first_str_decC = Label(root, text='Первая строка расшифрованого файла')
-    str_dec = Label(root, text=first_string_dec_file)
-    first_str_start.pack()
-    str_start.pack()
-    first_str_encC.pack()
-    str_enc.pack()
-    first_str_decC.pack()
-    str_dec.pack()
-    root.mainloop()
+#     root = Tk()
+#     root.title('Первые строки')
+#     root.geometry('400x200')
+#     first_str_start = Label(root, text='Первая строка исходного файла')
+#     str_start = Label(root, text=first_string_start_file)
+#     first_str_encC = Label(root, text='Первая строка зашифрованого файла')
+#     str_enc = Label(root, text=first_string_enc_file)
+#     first_str_decC = Label(root, text='Первая строка расшифрованого файла')
+#     str_dec = Label(root, text=first_string_dec_file)
+#     first_str_start.pack()
+#     str_start.pack()
+#     first_str_encC.pack()
+#     str_enc.pack()
+#     first_str_decC.pack()
+#     str_dec.pack()
+#     root.mainloop()
