@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter.messagebox import showerror, showwarning, showinfo
-
+import random as rnd
 
 start_file = 'text.txt'
 new_file = start_file[:-4]+'.txt'
@@ -17,6 +17,12 @@ def writeFile(file, value):
     with open(value+new_file,'w') as text:
         text.write(file)
     return file
+
+def GetPos(letter):
+    for i in range(len(alfavitEN)):
+        if letter == alfavitEN[i]:
+            return i
+    return -1
 
 def kvadratVigenera(alfavit):
     array = list(alfavit.upper())
@@ -51,6 +57,17 @@ def decryptionVigener(file,key):
 
 encryption_key = input('Введите ключ шифрования: ')
 decryption_key = input('Введите ключ дешифрования: ')
+alfavit_choice = int(input('Выберие алфавит замены\n1 - случайным образом\n2- по порядку'))
+
+if alfavit_choice == 1:
+    alfavitEN = list(alfavitEN)
+    rnd.shuffle(alfavitEN)
+    new_alfavit = ''
+    for letter in alfavitEN:
+        new_alfavit += letter
+    alfavitEN = new_alfavit
+else:
+    alfavitEN = alfavitEN
 
 result_encryptionVigenere = (encryptionVigener(start_file, encryption_key))
 writeFile(result_encryptionVigenere,'encV_')
