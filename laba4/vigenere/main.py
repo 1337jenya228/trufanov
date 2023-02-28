@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter.messagebox import showerror, showwarning, showinfo
 import random as rnd
 
-start_file = 'text.txt'
+start_file = 'laba4/vigenere/text.txt'
 new_file = start_file[:-4]+'.txt'
 alfavitEN =  'abcdefghijklmnopqrstuvwxyz'
 def readFile(file):
@@ -39,25 +39,24 @@ kvadratVigenera(alfavitEN)
 def encryptionVigener(file,key):
     result = ''
     text = readFile(file)
-    key *= len(text) // len(key) + 1
-
-    for i, j in enumerate(text):
-        gg = (ord(j) + ord(key[i]))
-        result += chr(gg % 26 + 65)
+    for i in range(len(text)):
+        text_pos = GetPos(text[i])
+        if text_pos != -1:
+            key_pos = GetPos(key[i%len(key)])
+            result += matrix[key_pos][text_pos]
+        else:
+            result += text[i]
     return result
 
 def decryptionVigener(file,key):
     result = ''
-    file = readFile(file)
-    for i, j in enumerate(result):
-        gg = (ord(j) - ord(key[i]))
-        print(chr(gg % 26 + 65))
-        result += chr(gg % 26 + 65)
+    text = readFile(file)
+    
     return result
 
 encryption_key = input('Введите ключ шифрования: ')
 decryption_key = input('Введите ключ дешифрования: ')
-alfavit_choice = int(input('Выберие алфавит замены\n1 - случайным образом\n2- по порядку'))
+alfavit_choice = int(input('Выберие алфавит замены\n1 - случайным образом\n2 - по порядку\n'))
 
 if alfavit_choice == 1:
     alfavitEN = list(alfavitEN)
@@ -68,6 +67,15 @@ if alfavit_choice == 1:
     alfavitEN = new_alfavit
 else:
     alfavitEN = alfavitEN
+
+
+len_alf = len(alfavitEN)
+matrix = ['a']*len_alf
+for i in range(len_alf):
+    matrix[i] = ['a']*len_alf
+for i in range(len_alf):
+    for j in range(len_alf):
+        matrix[i][j] = alfavitEN[j]
 
 result_encryptionVigenere = (encryptionVigener(start_file, encryption_key))
 writeFile(result_encryptionVigenere,'encV_')
