@@ -6,17 +6,20 @@ import random as rnd
 start_file = 'text.txt'
 new_file = start_file[:-4]+'.txt'
 alfavitEN =  'abcdefghijklmnopqrstuvwxyz'
-def readFile(file):
+def ReadFile(file):
     with open(file,'r') as text:
         mylist = text.read()
     return mylist
-def printFirstStringFile(file):
+
+def PrintFirstStringFile(file):
     with open(file,'r') as text:
         return text.readline()
-def writeFile(file, value):
+
+def WriteFile(file, value):
     with open(value+new_file,'w') as text:
         text.write(file)
     return file
+
 
 def GetPos(letter):
     for i in range(len(alfavitEN)):
@@ -24,7 +27,7 @@ def GetPos(letter):
             return i
     return -1
 
-def kvadratVigenera(alfavit):
+def KvadratVigenera(alfavit):
     array = list(alfavit.upper())
     for i in range(len(alfavit)):
         for i in array:
@@ -34,23 +37,22 @@ def kvadratVigenera(alfavit):
         array.append(array[0])
         array.remove(array[0])
         print()
-kvadratVigenera(alfavitEN)
 
-def encryptionVigener(file,key):
+def EncryptionVigener(file,key):
     result = ''
-    text = readFile(file)
+    text = ReadFile(file)
     for i in range(len(text)):
         text_pos = GetPos(text[i])
         if text_pos != -1:
             key_pos = GetPos(key[i%len(key)])
-            result += matrix[key_pos][text_pos]
+            result += matrix[text_pos][key_pos]
         else:
             result += text[i]
     return result
 
-def decryptionVigener(file,key):
+def DecryptionVigener(file,key):
     result = ''
-    text = readFile(file)
+    text = ReadFile(file)
     for i in range(len(text)):
         text_pos = GetPos(text[i])
         if text_pos != -1:
@@ -85,7 +87,7 @@ if alfavit_choice == 1:
     alfavitEN = new_alfavit
 else:
     alfavitEN = alfavitEN
-
+KvadratVigenera(alfavitEN)
 
 len_alf = len(alfavitEN)
 matrix = ['a']*len_alf
@@ -95,14 +97,14 @@ for i in range(len_alf):
     for j in range(len_alf):
         matrix[i][j] = alfavitEN[j]
 
-result_encryptionVigenere = (encryptionVigener(start_file, encryption_key))
-writeFile(result_encryptionVigenere,'encV_')
-result_decryptionVigenere = (decryptionVigener('encV_'+new_file,decryption_key))
-writeFile(result_decryptionVigenere,'decV_')
+result_encryptionVigenere = EncryptionVigener(start_file, encryption_key)
+WriteFile(result_encryptionVigenere,'encV_')
+result_decryptionVigenere = DecryptionVigener('encV_'+new_file,decryption_key)
+WriteFile(result_decryptionVigenere,'decV_')
 
-# first_string_start_file=printFirstStringFile(start_file)
-# first_string_enc_file=printFirstStringFile('encV_'+new_file)
-# first_string_dec_file=printFirstStringFile('decV_'+new_file)
+# first_string_start_file=PrintFirstStringFile(start_file)
+# first_string_enc_file=PrintFirstStringFile('encV_'+new_file)
+# first_string_dec_file=PrintFirstStringFile('decV_'+new_file)
 # class windows():
 
 #     root = Tk()
