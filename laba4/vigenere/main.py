@@ -6,28 +6,22 @@ import random as rnd
 start_file = 'text.txt'
 new_file = start_file[:-4]+'.txt'
 alfavitEN =  'abcdefghijklmnopqrstuvwxyz'
-def ReadFile(file):
+alfavit_spec = ' \,./;:"][}{+-*&^%#@'
+def readFile(file):
     with open(file,'r') as text:
         mylist = text.read()
     return mylist
 
-def PrintFirstStringFile(file):
+def printFirstString(file):
     with open(file,'r') as text:
         return text.readline()
 
-def WriteFile(file, value):
+def writeFile(file, value):
     with open(value+new_file,'w') as text:
         text.write(file)
     return file
 
-
-def GetPos(letter):
-    for i in range(len(alfavitEN)):
-        if letter == alfavitEN[i]:
-            return i
-    return -1
-
-def KvadratVigenera(alfavit):
+def kvadratVigenere(alfavit):
     array = list(alfavit.upper())
     for i in range(len(alfavit)):
         for i in array:
@@ -38,40 +32,94 @@ def KvadratVigenera(alfavit):
         array.remove(array[0])
         print()
 
-def EncryptionVigener(file,key):
-    result = ''
-    text = ReadFile(file)
-    for i in range(len(text)):
-        text_pos = GetPos(text[i])
-        if text_pos != -1:
-            key_pos = GetPos(key[i%len(key)])
-            result += matrix[text_pos][key_pos]
+def form_dict():
+    dict = {}
+    iter = 0
+    for i in range(0,len(alfavitEN)):
+        dict[iter] = alfavitEN[i]
+        iter = iter +1
+    return dict
+
+def form_dict_spec():
+    dict = {}
+    iter = 52
+    for i in range(0,len(alfavit_spec)):
+        dict[iter] = alfavit_spec[i]
+        iter = iter +1
+    return dict
+
+def encode_val(file):
+    text = readFile(file)
+    list_code = []
+    lent = len(text)
+    d = form_dict()
+    d_spec = form_dict_spec()
+
+    for w in range(lent):
+        if text[w] in alfavitEN:
+            for value in d:
+                if text[w] == d[value]:
+                    list_code.append(value)
         else:
-            result += text[i]
+            for value in d_spec:
+                if text[w] == d_spec[value]:
+                    list_code.append(value)
+    return list_code
+
+def comparator(value, key):
+    len_key = len(key)
+    dic = {}
+    iter = 0
+    full = 0
+
+    for i in value:
+        dic[full] = [i,key[iter]]
+        full = full + 1
+        iter = iter +1
+        if (iter >= len_key):
+            iter = 0
+    return dic
+
+def encryptionVigener(value, key):
+    dic = comparator(value, key)
+    result = []
+    d = form_dict()
+    for v in dic:
+        if dic[v][0] > 51:
+            result.append(dic[v][0])
+        else:
+            go = (dic[v][0]+dic[v][1]) % len(d)
+            result.append(go)
     return result
 
-def DecryptionVigener(file,key):
-    result = ''
-    text = ReadFile(file)
-    for i in range(len(text)):
-        text_pos = GetPos(text[i])
-        if text_pos != -1:
-            key_pos = GetPos(key[i%len(key)])
-            result += matrix[key_pos][text_pos]
+def decode_val(list_in):
+    list_code = []
+    lent = len(list_in)
+    d = form_dict()
+    d_spec = form_dict_spec()
+    for i in range(lent):
+        if list_in[i] < 52:
+            for value in d:
+                if list_in[i] == value:
+                    list_code.append(d[value])
         else:
-            result += text[i]
-    # result = ''
-    # text = readFile(file)
-    # for i in range(len(text)):
-    #     text_pos = GetPos(text[i])
-    #     if text_pos != -1:
-    #         j = 1
-    #         key_pos = GetPos(key[i%len(key)])
-    #         while((matrix[j][key_pos])!=text[i]):
-    #             result += alfavitEN[j]
-    #             j+=1
-    #     else:
-    #         result += text[i]
+            for value in d_spec:
+                if list_in[i] == value:
+                    list_code.append(d_spec[value])
+
+    return list_code
+
+
+def decryptionVigener(value, key):
+    dic = comparator(value, key)
+    d = form_dict()
+    result =[]
+    for v in dic:
+        if dic[v][0] > 51:
+            result.append(dic[v][0])
+        else:
+            go = (dic[v][0]-dic[v][1]+len(d)) % len(d)
+            result.append(go)
     return result
 
 encryption_key = input('Введите ключ шифрования: ')
@@ -87,20 +135,16 @@ if alfavit_choice == 1:
     alfavitEN = new_alfavit
 else:
     alfavitEN = alfavitEN
-KvadratVigenera(alfavitEN)
 
-len_alf = len(alfavitEN)
-matrix = ['a']*len_alf
-for i in range(len_alf):
-    matrix[i] = ['a']*len_alf
-for i in range(len_alf):
-    for j in range(len_alf):
-        matrix[i][j] = alfavitEN[j]
 
-result_encryptionVigenere = EncryptionVigener(start_file, encryption_key)
-WriteFile(result_encryptionVigenere,'encV_')
-result_decryptionVigenere = DecryptionVigener('encV_'+new_file,decryption_key)
-WriteFile(result_decryptionVigenere,'decV_')
+kvadratVigenere(alfavitEN)
+
+
+
+result_encryptionVigenere = encryptionVigener(start_file, encryption_key)
+writeFile(result_encryptionVigenere, 'encV_')
+result_decryptionVigenere = decryptionVigener('encV_' + new_file, decryption_key)
+writeFile(result_decryptionVigenere, 'decV_')
 
 # first_string_start_file=PrintFirstStringFile(start_file)
 # first_string_enc_file=PrintFirstStringFile('encV_'+new_file)

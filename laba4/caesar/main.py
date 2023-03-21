@@ -8,6 +8,7 @@ alfavitEN = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
 def readFile(file):
     with open(file,'r') as text:
         mylist = text.read()
+        mylist = mylist.lower()
     return mylist
 def printFirstStringFile(file):
     with open(file,'r') as text:
@@ -23,16 +24,10 @@ def encryptionCaesar(file, move_step,alfavit):
     for letter in text:
         place = alfavit.find(letter)
         new_place =  place + move_step
-        if letter.isupper():
-            if letter in alfavit:
-                result += alfavit[new_place].upper()
-            else:
-                result += letter.upper()
+        if letter in alfavit:
+             result += alfavit[new_place]
         else:
-            if letter in alfavit:
-                result += alfavit[new_place]
-            else:
-                result += letter
+             result += letter
     return result
 
 def decryptionCaesar(file, move_step,alfavit):
@@ -41,16 +36,10 @@ def decryptionCaesar(file, move_step,alfavit):
     for letter in text:
         place = alfavit.find(letter)
         new_place = place - move_step
-        if letter.isupper():
-            if letter in alfavit:
-                result += alfavit[new_place].upper()
-            else:
-                result += letter.upper()
+        if letter in alfavit:
+            result += alfavit[new_place]
         else:
-            if letter in alfavit:
-                result += alfavit[new_place]
-            else:
-                result += letter
+            result += letter
     return result
 
 encryption_step = int(input('Введите шаг шифрования: '))
