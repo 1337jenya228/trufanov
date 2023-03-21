@@ -48,8 +48,7 @@ def form_dict_spec():
         iter = iter +1
     return dict
 
-def encode_val(file):
-    text = readFile(file)
+def encode_val(text):
     list_code = []
     lent = len(text)
     d = form_dict()
@@ -71,7 +70,6 @@ def comparator(value, key):
     dic = {}
     iter = 0
     full = 0
-
     for i in value:
         dic[full] = [i,key[iter]]
         full = full + 1
@@ -140,10 +138,11 @@ else:
 kvadratVigenere(alfavitEN)
 
 
+text = readFile(start_file)
+result_encryptionVigenere = encryptionVigener(encode_val(text), encode_val(encryption_key))
 
-result_encryptionVigenere = encryptionVigener(start_file, encryption_key)
-writeFile(result_encryptionVigenere, 'encV_')
-result_decryptionVigenere = decryptionVigener('encV_' + new_file, decryption_key)
+writeFile(''.join(decode_val(result_encryptionVigenere)), 'encV_')
+result_decryptionVigenere = decryptionVigener(decode_val(text), decode_val(decryption_key))
 writeFile(result_decryptionVigenere, 'decV_')
 
 # first_string_start_file=PrintFirstStringFile(start_file)
