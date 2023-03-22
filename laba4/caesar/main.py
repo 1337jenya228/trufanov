@@ -4,7 +4,7 @@ from tkinter.messagebox import showerror, showwarning, showinfo
 
 start_file = 'text.txt'
 new_file = start_file[:-4]+'.txt'
-alfavitEN = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
+alfavitEN = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяабвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 def readFile(file):
     with open(file,'r') as text:
         mylist = text.read()

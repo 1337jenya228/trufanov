@@ -3,26 +3,124 @@ from tkinter import ttk
 from tkinter.messagebox import showerror, showwarning, showinfo
 import random as rnd
 
-start_file = 'text.txt'
-new_file = start_file[:-4]+'.txt'
-alfavitEN =  'abcdefghijklmnopqrstuvwxyz'
-alfavit_spec = ' \,./;:"][}{+-*&^%#@'
 def readFile(file):
     with open(file,'r') as text:
-        mylist = text.read()
-    return mylist
+        mystr = text.read()
+    return mystr
 
-def printFirstString(file):
+def writeFile(file, text, value):
+    with open(value+file,'w') as file:
+        file.write(text)
+    return text
+
+def readFileOneLine(file):
     with open(file,'r') as text:
-        return text.readline()
+        mystr = text.readline()
+    return mystr[0:mystr.find('.')]
 
-def writeFile(file, value):
-    with open(value+new_file,'w') as text:
-        text.write(file)
-    return file
+alfavitEN = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
+alfavitSPEC = ' \n,./;:"][}{+-*&^%#@'
+#alfavit1 = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
 
-def kvadratVigenere(alfavit):
-    array = list(alfavit.upper())
+def form_dict():
+    d = {}
+    iter = 0
+    for i in range(0, len(alfavitEN)):
+        d[iter] = alfavitEN[i]
+        iter = iter +1
+    return d
+
+def form_dict_spec():
+    d = {}
+    iter = 66
+    for i in range(0, len(alfavitSPEC)):
+        d[iter] = alfavitSPEC[i]
+        iter = iter +1
+    return d
+
+def encode_val(word):
+    list_code = []
+    lent = len(word)
+    d = form_dict()
+    d_spec = form_dict_spec()
+
+    for w in range(lent):
+        if word[w] in alfavitEN:
+            for value in d:
+                if word[w] == d[value]:
+                    list_code.append(value)
+        else:
+            for value in d_spec:
+                if word[w] == d_spec[value]:
+                    list_code.append(value)
+
+
+
+    return list_code
+
+def comparator(value, key):
+    len_key = len(key)
+    dic = {}
+    iter = 0
+    full = 0
+
+    for i in value:
+        dic[full] = [i,key[iter]]
+        full = full + 1
+        iter = iter +1
+        if (iter >= len_key):
+            iter = 0
+    return dic
+
+def full_encode(value, key):
+    dic = comparator(value, key)
+    lis = []
+    d = form_dict()
+
+    for v in dic:
+        if dic[v][0] > 65:
+            lis.append(dic[v][0])
+        else:
+            go = (dic[v][0]+dic[v][1]) % len(d)
+            lis.append(go)
+    return lis
+
+def decode_val(list_in):
+    list_code = []
+    lent = len(list_in)
+    d = form_dict()
+    d_spec = form_dict_spec()
+
+    for i in range(lent):
+        if list_in[i] < 66:
+            for value in d:
+                if list_in[i] == value:
+                    list_code.append(d[value])
+
+        else:
+            for value in d_spec:
+                if list_in[i] == value:
+                    list_code.append(d_spec[value])
+
+    return list_code
+
+
+def full_decode(value, key):
+    dic = comparator(value, key)
+    d = form_dict()
+    lis =[]
+
+    for v in dic:
+        if dic[v][0] > 65:
+            lis.append(dic[v][0])
+        else:
+            go = (dic[v][0]-dic[v][1]+len(d)) % len(d)
+            lis.append(go)
+    return lis
+
+
+def kvadratVigenera(alfavit):
+    array = list(alfavitEN)
     for i in range(len(alfavit)):
         for i in array:
             if i == array[0]:
@@ -32,96 +130,6 @@ def kvadratVigenere(alfavit):
         array.remove(array[0])
         print()
 
-def form_dict():
-    dict = {}
-    iter = 0
-    for i in range(0,len(alfavitEN)):
-        dict[iter] = alfavitEN[i]
-        iter = iter +1
-    return dict
-
-def form_dict_spec():
-    dict = {}
-    iter = 52
-    for i in range(0,len(alfavit_spec)):
-        dict[iter] = alfavit_spec[i]
-        iter = iter +1
-    return dict
-
-def encode_val(text):
-    list_code = []
-    lent = len(text)
-    d = form_dict()
-    d_spec = form_dict_spec()
-
-    for w in range(lent):
-        if text[w] in alfavitEN:
-            for value in d:
-                if text[w] == d[value]:
-                    list_code.append(value)
-        else:
-            for value in d_spec:
-                if text[w] == d_spec[value]:
-                    list_code.append(value)
-    return list_code
-
-def comparator(value, key):
-    len_key = len(key)
-    dic = {}
-    iter = 0
-    full = 0
-    for i in value:
-        dic[full] = [i,key[iter]]
-        full = full + 1
-        iter = iter +1
-        if (iter >= len_key):
-            iter = 0
-    return dic
-
-def encryptionVigener(value, key):
-    dic = comparator(value, key)
-    result = []
-    d = form_dict()
-    for v in dic:
-        if dic[v][0] > 51:
-            result.append(dic[v][0])
-        else:
-            go = (dic[v][0]+dic[v][1]) % len(d)
-            result.append(go)
-    return result
-
-def decode_val(list_in):
-    list_code = []
-    lent = len(list_in)
-    d = form_dict()
-    d_spec = form_dict_spec()
-    for i in range(lent):
-        if list_in[i] < 52:
-            for value in d:
-                if list_in[i] == value:
-                    list_code.append(d[value])
-        else:
-            for value in d_spec:
-                if list_in[i] == value:
-                    list_code.append(d_spec[value])
-
-    return list_code
-
-
-def decryptionVigener(value, key):
-    dic = comparator(value, key)
-    d = form_dict()
-    result =[]
-    for v in dic:
-        if dic[v][0] > 51:
-            result.append(dic[v][0])
-        else:
-            go = (dic[v][0]-dic[v][1]+len(d)) % len(d)
-            result.append(go)
-    return result
-
-encryption_key = input('Введите ключ шифрования: ')
-decryption_key = input('Введите ключ дешифрования: ')
 alfavit_choice = int(input('Выберие алфавит замены\n1 - случайным образом\n2 - по порядку\n'))
 
 if alfavit_choice == 1:
@@ -134,35 +142,38 @@ if alfavit_choice == 1:
 else:
     alfavitEN = alfavitEN
 
+file_name = 'text.txt'
+word = readFile(file_name)
 
-kvadratVigenere(alfavitEN)
+key =input('Введите ключ:')
+key_encoded = encode_val(key)
+value_encoded = encode_val(word)
+shifre = full_encode(value_encoded, key_encoded)
+writeFile('text.txt', ''.join(decode_val(shifre)), 'encV_')
+decoded = full_decode(shifre, key_encoded)
+decode_word_list = decode_val(decoded)
+writeFile('text.txt', ''.join(decode_word_list), 'decV_')
 
+kvadratVigenera(alfavitEN)
 
-text = readFile(start_file)
-result_encryptionVigenere = encryptionVigener(encode_val(text), encode_val(encryption_key))
+first_string_start_file=readFileOneLine(file_name)
+first_string_enc_file=readFileOneLine('encV_'+file_name)
+first_string_dec_file=readFileOneLine('decV_'+file_name)
 
-writeFile(''.join(decode_val(result_encryptionVigenere)), 'encV_')
-result_decryptionVigenere = decryptionVigener(decode_val(text), decode_val(decryption_key))
-writeFile(result_decryptionVigenere, 'decV_')
-
-# first_string_start_file=PrintFirstStringFile(start_file)
-# first_string_enc_file=PrintFirstStringFile('encV_'+new_file)
-# first_string_dec_file=PrintFirstStringFile('decV_'+new_file)
-# class windows():
-
-#     root = Tk()
-#     root.title('Первые строки')
-#     root.geometry('400x200')
-#     first_str_start = Label(root, text='Первая строка исходного файла')
-#     str_start = Label(root, text=first_string_start_file)
-#     first_str_encC = Label(root, text='Первая строка зашифрованого файла')
-#     str_enc = Label(root, text=first_string_enc_file)
-#     first_str_decC = Label(root, text='Первая строка расшифрованого файла')
-#     str_dec = Label(root, text=first_string_dec_file)
-#     first_str_start.pack()
-#     str_start.pack()
-#     first_str_encC.pack()
-#     str_enc.pack()
-#     first_str_decC.pack()
-#     str_dec.pack()
-#     root.mainloop()
+class windows():
+    root = Tk()
+    root.title('Первые строки')
+    root.geometry('400x200')
+    first_str_start = Label(root, text='Первая строка исходного файла')
+    str_start = Label(root, text=first_string_start_file)
+    first_str_encV = Label(root, text='Первая строка зашифрованого файла')
+    str_enc = Label(root, text=first_string_enc_file)
+    first_str_decV = Label(root, text='Первая строка расшифрованого файла')
+    str_dec = Label(root, text=first_string_dec_file)
+    first_str_start.pack()
+    str_start.pack()
+    first_str_encV.pack()
+    str_enc.pack()
+    first_str_decV.pack()
+    str_dec.pack()
+    root.mainloop()
